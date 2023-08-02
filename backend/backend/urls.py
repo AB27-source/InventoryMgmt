@@ -19,9 +19,9 @@ from rest_framework import routers
 from inventory import views
 
 router = routers.DefaultRouter()
-router.register(r'bevarages', views.BeverageView, 'inventory')
-router.register(r'freezer', views.FrozenView, 'inventory')
-router.register(r'snacks', views.SnackShelfView, 'inventory')
+router.register(r'bevarages', views.BeverageView, 'bevarages')
+router.register(r'freezer', views.FrozenView, 'freezer')
+router.register(r'snackshelf', views.SnackShelfView, 'snackshelf')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

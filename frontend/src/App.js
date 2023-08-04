@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Dashboard from './components/Dashboard';
+import Home2 from './components/Home2';
+import Other1 from './components/other1';
+import Other2 from './components/other2';
+import SnackShelf from './components/Snackshelf';
+import Beverages from './components/Beverages';
+import Freezer from './components/Freezer';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div>
+        <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/home2" element={<Home2 />} />
+          <Route path="/other1" element={<Other1 />} />
+          <Route path="/other2" element={<Other2 />} />
+          <Route path="/snackshelf" element={<SnackShelf />} />
+          <Route path="/beverages" element={<Beverages />} />
+          <Route path="/freezer" element={<Freezer />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

@@ -1,0 +1,19 @@
+.dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* This will make the dashboard take up the full height of the viewport */
+  }
+  
+  .box {
+    width: 200px;
+    height: 100px;
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+  }
+  

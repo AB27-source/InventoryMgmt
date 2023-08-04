@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const serverUrl = 'http://localhost:8000/api/snackshelf/';
+
 const SnackShelfPage = () => {
   const [items, setItems] = useState([]);
   const [filter, setFilter] = useState('All');
@@ -16,6 +18,16 @@ const SnackShelfPage = () => {
   }, []);
 
   const filteredItems = filter === 'All' ? items : items.filter(item => item.type === filter);
+  
+  const handleQuantityChange = (id, newQuantity) => {
+    axios.put(`${serverUrl}${id}`, {
+      quantity: Number(newQuantity)
+    });
+    console.log(newQuantity)
+  };
+  
+  
+  
 
   return (
     <div>
@@ -34,7 +46,6 @@ const SnackShelfPage = () => {
         <thead>
           <tr>
             <th>Name</th>
-            {/* <th>Type</th> */}
             <th>Quantity</th>
           </tr>
         </thead>
@@ -42,8 +53,13 @@ const SnackShelfPage = () => {
           {filteredItems.map(item => (
             <tr key={item.id}>
               <td>{item.name}</td>
-              {/* <td>{item.type}</td> */}
-              <td>{item.quantity}</td>
+              <td>
+                <input 
+                  type="number" 
+                  value={item.quantity} 
+                  onChange={e => handleQuantityChange(item.id, e.target.value)}
+                />
+              </td>
             </tr>
           ))}
         </tbody>

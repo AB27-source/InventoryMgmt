@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Beverage, Frozen, SnackShelf
+from .models import Beverage, Frozen, SnackShelf, VarianceCalculatorEntry
 
 class BeverageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,4 +14,9 @@ class FrozenSerializer(serializers.ModelSerializer):
 class SnackShelfSerializer(serializers.ModelSerializer):
     class Meta:
         model = SnackShelf
+        fields = '__all__'
+
+class VarianceCalculatorEntrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VarianceCalculatorEntry
         fields = '__all__'

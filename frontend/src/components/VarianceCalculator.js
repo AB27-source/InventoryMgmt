@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import { calculateVariance } from "../utils";
 import Button from "react-bootstrap/Button";
+import ConfigContext from '../ConfigContext';
+
+
 
 
 const VarianceCalculator = () => {
@@ -16,11 +19,12 @@ const VarianceCalculator = () => {
     prevSales: 0,
   });
   const[snackshelfItems, setSnackshelfItems] = useState([]);
+  const config = useContext(ConfigContext);
 
   useEffect(() => {
     // Fetch all entries from the database
     axios
-      .get("http://localhost:8000/api/variancecalculator/")
+      .get(config.varianceCalculatorEndpoint)
       .then((res) => {
         setEntries(res.data);
       })
@@ -32,7 +36,7 @@ const VarianceCalculator = () => {
   useEffect(() => {
     // Fetch all entries from the database
     axios
-      .get("http://localhost:8000/api/snackshelf/")
+      .get(config.snackshelfEndpoint)
       .then((res) => {
         setSnackshelfItems(res.data);
       })

@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import SnackShelfStock from './SnackshelfStock';
 import VarianceCalculator from './VarianceCalculator';
-import Container from'react-bootstrap/Container';
+import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import EditableTable from './EditableTable';
 
 const Home2 = () => {
   const [selectedKey, setSelectedKey] = useState(null);
@@ -17,59 +16,52 @@ const Home2 = () => {
 
   return (
     <>
-    <Navbar className="bg-body-tertiary">
-      <Container>
-        <Nav variant="pills" onSelect={handleSelect}>
+      <Navbar className="bg-body-tertiary">
         <Container>
-        <Navbar.Brand href="#home">
-          <img
-          alt =""
-          src="/Home2_Suites_by_Hilton_logo.svg"
-          width="80"
-          height="40"
-          className="d-inline-block align-top"
-          />{' '}
-        </Navbar.Brand>
-      </Container>
-          <Nav.Item>
+          <Nav variant="pills" fill={true} onSelect={handleSelect}>
             <Container>
-              <NavDropdown title="SnackShelf" id="nav-dropdown">
-                <NavDropdown.Item eventKey="1.1">Calculate Variance</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item eventKey="1.2">Edit Stock</NavDropdown.Item>
-              </NavDropdown>
+              <Navbar.Brand href="#home">
+                <img
+                  alt=""
+                  src="/Home2_Suites_by_Hilton_logo.svg"
+                  width="80"
+                  height="40"
+                  className="d-inline-block align-top"
+                />
+                {' '}
+              </Navbar.Brand>
             </Container>
-          </Nav.Item>
-          <Nav.Item>
             <Container>
-              <NavDropdown title="Beverage Cooler" id="nav-dropdown">
-                <NavDropdown.Item eventKey="2.1">Calculate Variance</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item eventKey="2.2">Edit Stock</NavDropdown.Item>
-              </NavDropdown>
+              <Nav.Item class="text-nowrap">
+                <Nav.Link eventKey="snackshelf">Snack Shelf</Nav.Link>
+              </Nav.Item>
             </Container>
-          </Nav.Item>
-          <Nav.Item>
             <Container>
-              <NavDropdown title="Freezer" id="nav-dropdown">
-                <NavDropdown.Item eventKey="3.1">Calculate Variance</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item eventKey="3.2">Edit Stock</NavDropdown.Item>
-              </NavDropdown>
+              <Nav.Item class="text-nowrap">
+                <Nav.Link eventKey="beverage">Beverage Cooler</Nav.Link>
+              </Nav.Item>
             </Container>
-          </Nav.Item>
-        </Nav>
-      </Container>
-    </Navbar>
-      
+            <Container>
+              <Nav.Item>
+                <Nav.Link eventKey="freezer">Freezer</Nav.Link>
+              </Nav.Item>
+            </Container>
+          </Nav>
+        </Container>
+      </Navbar>
+
       <Container>
         <Row>
-          {/* Conditionally render SnackShelfStock based on selectedKey */}
+          {/* Conditionally render components based on selectedKey */}
           <Col>
-            {selectedKey === "1.2" && <SnackShelfStock />}
+            {selectedKey === "snackshelf" && <EditableTable selectedDatabase="snackshelfEndpoint" />}
+            {selectedKey === "beverage" && <EditableTable selectedDatabase="beveragesEndpoint" />}
+            {selectedKey === "freezer" && <EditableTable selectedDatabase="freezerEndpoint" />}
           </Col>
           <Col>
-            {selectedKey === "1.2" && <VarianceCalculator />}
+            {selectedKey === "snackshelf" && <VarianceCalculator/>}
+            {selectedKey === "beverage" && <VarianceCalculator/>}
+            {selectedKey === "freezer" && <VarianceCalculator/>}
           </Col>
         </Row>
       </Container>

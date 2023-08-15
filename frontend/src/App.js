@@ -10,7 +10,7 @@ const config = {
   varianceCalculatorEndpoint: "http://localhost:8000/api/variancecalculator/",
   snackshelfEndpoint: "http://localhost:8000/api/snackshelf/",
   freezerEndpoint: "http://localhost:8000/api/freezer/",
-  beveragesEndpoint: "http://localhost:8000/api/bevarages/"
+  beveragesEndpoint: "http://localhost:8000/api/beverages/"
 }
 
 function App() {

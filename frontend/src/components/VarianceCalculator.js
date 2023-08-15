@@ -6,7 +6,7 @@ import { calculateBookCount, calculateVariance } from "../utils";
 import Button from "react-bootstrap/Button";
 import ConfigContext from "../ConfigContext";
 
-const VarianceCalculator = () => {
+const VarianceCalculator = ({ section }) => {
   const [entries, setEntries] = useState([]);
   const [currentData, setCurrentData] = useState({
     endCount: 0,
@@ -87,6 +87,7 @@ const VarianceCalculator = () => {
 
         // Prepare data to send to the backend
         const dataToSend = {
+          section: section,
           previous_day_end_count,
           inventory_sold: currentData.sold,
           added_inventory: currentData.added,

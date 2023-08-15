@@ -59,9 +59,9 @@ const Home2 = () => {
             {selectedKey === "freezer" && <EditableTable selectedDatabase="freezerEndpoint" />}
           </Col>
           <Col>
-            {selectedKey === "snackshelf" && <VarianceCalculator/>}
-            {selectedKey === "beverage" && <VarianceCalculator/>}
-            {selectedKey === "freezer" && <VarianceCalculator/>}
+            {selectedKey === "snackshelf" && <VarianceCalculator section="snackshelf" />}
+            {selectedKey === "beverage" && <VarianceCalculator section="beverage" />}
+            {selectedKey === "freezer" && <VarianceCalculator section="freezer" />}
           </Col>
         </Row>
       </Container>

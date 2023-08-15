@@ -39,6 +39,12 @@ class SnackShelf(models.Model):
         return self.name
 
 class VarianceCalculatorEntry(models.Model):
+    SECTION_CHOICES = [
+        ('snackshelf', 'Snack Shelf'),
+        ('freezer', 'Freezer'),
+        ('beverage', 'Beverage Cooler')
+    ]
+    section = models.CharField(max_length=10, choices=SECTION_CHOICES, null=True, blank=True)
     date = models.DateField(auto_now_add=True, verbose_name="Date")
     previous_day_end_count = models.PositiveIntegerField(verbose_name="Previous Day End Count")
     inventory_sold = models.PositiveIntegerField(verbose_name="Inventory Sold")

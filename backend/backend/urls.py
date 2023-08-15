@@ -4,7 +4,7 @@ from rest_framework import routers
 from inventory import views
 
 router = routers.DefaultRouter()
-router.register(r'bevarages', views.BeverageView, 'bevarages')
+router.register(r'beverages', views.BeverageView, 'beverages')
 router.register(r'freezer', views.FrozenView, 'freezer')
 router.register(r'snackshelf', views.SnackShelfView, 'snackshelf')
 router.register(r'variancecalculator', views.VarianceCalculatorEntryView, 'variancecalculator')

@@ -2,12 +2,9 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
-import { calculateVariance } from "../utils";
+import { calculateBookCount, calculateVariance } from "../utils";
 import Button from "react-bootstrap/Button";
-import ConfigContext from '../ConfigContext';
-
-
-
+import ConfigContext from "../ConfigContext";
 
 const VarianceCalculator = () => {
   const [entries, setEntries] = useState([]);
@@ -18,7 +15,7 @@ const VarianceCalculator = () => {
     transferred: 0,
     prevSales: 0,
   });
-  const[snackshelfItems, setSnackshelfItems] = useState([]);
+  const [snackshelfItems, setSnackshelfItems] = useState([]);
   const config = useContext(ConfigContext);
 
   useEffect(() => {
@@ -48,11 +45,11 @@ const VarianceCalculator = () => {
   const handleAddData = (e) => {
     e.preventDefault();
     // Fetch the latest entry from the database
-    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+    const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
     // Check if there's already an entry for today
-    const existingEntryForToday = entries.find(entry => entry.date === today);
-  
+    const existingEntryForToday = entries.find((entry) => entry.date === today);
+
     if (existingEntryForToday) {
       alert("You've already added an entry for today!");
       return;
@@ -77,7 +74,16 @@ const VarianceCalculator = () => {
         } else {
           previous_day_end_count = latestEntry.end_count;
         }
-        
+
+        // Use the utility functions to calculate book_count and variance
+        const bookCount = calculateBookCount(
+          previous_day_end_count,
+          currentData.sold,
+          currentData.added,
+          currentData.transferred,
+          currentData.prevSales
+        );
+        const variance = calculateVariance(currentData.endCount, bookCount);
 
         // Prepare data to send to the backend
         const dataToSend = {
@@ -87,6 +93,8 @@ const VarianceCalculator = () => {
           transferred_inventory: currentData.transferred,
           previous_day_sales: currentData.prevSales,
           end_count: currentData.endCount,
+          book_count: bookCount, // Use the calculated bookCount
+          variance: variance, // Use the calculated variance
         };
 
         // Make a POST request to save the data
@@ -96,7 +104,7 @@ const VarianceCalculator = () => {
             console.log("Data saved successfully:", response.data);
             // You can also update the frontend state here if needed
             // Update the frontend state to reflect the new entry
-            setEntries(prevEntries => [response.data, ...prevEntries]);
+            setEntries((prevEntries) => [response.data, ...prevEntries]);
           })
           .catch((error) => {
             console.error("Error saving data:", error);
@@ -174,7 +182,9 @@ const VarianceCalculator = () => {
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit">Add Data for Today</Button>
+        <Button variant="primary" type="submit">
+          Add Data for Today
+        </Button>
       </Form>
 
       {entries.length > 0 && (

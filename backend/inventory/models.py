@@ -49,12 +49,6 @@ class VarianceCalculatorEntry(models.Model):
     book_count = models.PositiveIntegerField(verbose_name="Book Count", default=0)
     variance = models.IntegerField(verbose_name="Variance", default = 0)  # This can be negative, so using IntegerField
 
-    def save(self, *args, **kwargs):
-        # Calculate book_count and variance before saving
-        self.book_count = self.previous_day_end_count + self.added_inventory - self.inventory_sold - self.transferred_inventory - self.previous_day_sales
-        self.variance = self.end_count - self.book_count
-        super(VarianceCalculatorEntry, self).save(*args, **kwargs)
-
     def __str__(self):
         return f"Entry for {self.date}"
 

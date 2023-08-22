@@ -3,7 +3,8 @@ import axios from "axios";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import { calculateBookCount, calculateVariance } from "../utils";
-import Button from "react-bootstrap/Button";
+import 'dracula-ui/styles/dracula-ui.css'
+import { Button } from 'dracula-ui'
 import ConfigContext from "../ConfigContext";
 
 const VarianceCalculator = ({ section }) => {
@@ -16,7 +17,10 @@ const VarianceCalculator = ({ section }) => {
     prevSales: 0,
   });
   const [snackshelfItems, setSnackshelfItems] = useState([]);
+  const [beverageItems, setBeverageItems] = useState([]);
+  const [freezerItems, setFreezerItems] = useState([]);
   const config = useContext(ConfigContext);
+  const filteredEntries = entries.filter(entry => entry.section === section);
 
   useEffect(() => {
     // Fetch all entries from the database
@@ -31,7 +35,7 @@ const VarianceCalculator = ({ section }) => {
   }, []);
 
   useEffect(() => {
-    // Fetch all entries from the database
+    // Fetch all entries from the snackshelf database
     axios
       .get(config.snackshelfEndpoint)
       .then((res) => {
@@ -42,75 +46,88 @@ const VarianceCalculator = ({ section }) => {
       });
   }, []);
 
+  useEffect(() => {
+    // Fetch all entries from the beverage database
+    axios
+     .get(config.beveragesEndpoint)
+     .then((res) => {
+        setBeverageItems(res.data);
+      })
+     .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    // Fetch all entries from the freezer database
+    axios
+    .get(config.freezerEndpoint)
+    .then((res) => {
+        setFreezerItems(res.data);
+      })
+    .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   const handleAddData = (e) => {
     e.preventDefault();
-    // Fetch the latest entry from the database
-    const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
-
-    // Check if there's already an entry for today
-    const existingEntryForToday = entries.find((entry) => entry.date === today);
-
-    if (existingEntryForToday) {
-      alert("You've already added an entry for today!");
-      return;
+    const today = new Date().toISOString().split('T')[0];  // Format: YYYY-MM-DD
+  
+    const existingEntryForTodayAndSection = entries.find((entry) => entry.date === today && entry.section === section);
+  
+    if (existingEntryForTodayAndSection) {
+        alert("You've already added an entry for today for this section!");
+        return;
+    }
+  
+    let previous_day_end_count;
+  
+    // Check if there are any existing entries for the selected section
+    const latestEntry = entries.find(entry => entry.section === section);
+  
+    if (latestEntry) {
+      // Use the "End Count" of the latest entry
+      previous_day_end_count = latestEntry.end_count;
+    } else {
+      // Use the initial count from the respective database
+      if (section === 'snackshelf') {
+        previous_day_end_count = snackshelfItems.reduce((acc, item) => acc + item.quantity, 0);
+      } else if (section === 'beverage') {
+        previous_day_end_count = beverageItems.reduce((acc, item) => acc + item.quantity, 0);
+      } else if (section === 'freezer') {
+        previous_day_end_count = freezerItems.reduce((acc, item) => acc + item.quantity, 0);
+      }
     }
 
+    const bookCount = calculateBookCount(
+      previous_day_end_count,
+      currentData.added,
+      currentData.transferred,
+      currentData.prevSales
+    );
+    const variance = calculateVariance(currentData.endCount, bookCount);
+
+    const dataToSend = {
+      section: section,
+      previous_day_end_count,
+      added_inventory: currentData.added,
+      transferred_inventory: currentData.transferred,
+      previous_day_sales: currentData.prevSales,
+      end_count: currentData.endCount,
+      book_count: bookCount,
+      variance: variance,
+    };
+
     axios
-      .get("http://localhost:8000/api/variancecalculator/")
+      .post("http://localhost:8000/api/variancecalculator/", dataToSend)
       .then((response) => {
-        const latestEntry = response.data[0]; // Assuming the API returns the entries in descending order of date
-
-        let previous_day_end_count;
-
-        // Check if it's the first entry of the month
-        if (
-          !latestEntry ||
-          new Date(latestEntry.date).getMonth() !== new Date().getMonth()
-        ) {
-          previous_day_end_count = snackshelfItems.reduce(
-            (acc, item) => acc + item.quantity,
-            0
-          );
-        } else {
-          previous_day_end_count = latestEntry.end_count;
-        }
-
-        // Use the utility functions to calculate book_count and variance
-        const bookCount = calculateBookCount(
-          previous_day_end_count,
-          currentData.sold,
-          currentData.added,
-          currentData.transferred,
-          currentData.prevSales
-        );
-        const variance = calculateVariance(currentData.endCount, bookCount);
-
-        // Prepare data to send to the backend
-        const dataToSend = {
-          section: section,
-          previous_day_end_count,
-          inventory_sold: currentData.sold,
-          added_inventory: currentData.added,
-          transferred_inventory: currentData.transferred,
-          previous_day_sales: currentData.prevSales,
-          end_count: currentData.endCount,
-          book_count: bookCount, // Use the calculated bookCount
-          variance: variance, // Use the calculated variance
-        };
-
-        // Make a POST request to save the data
-        axios
-          .post("http://localhost:8000/api/variancecalculator/", dataToSend)
-          .then((response) => {
-            console.log("Data saved successfully:", response.data);
-            // You can also update the frontend state here if needed
-            // Update the frontend state to reflect the new entry
-            setEntries((prevEntries) => [response.data, ...prevEntries]);
-          })
-          .catch((error) => {
-            console.error("Error saving data:", error);
-            alert("Failed to save data. Please try again.");
-          });
+        console.log("Data saved successfully:", response.data);
+        setEntries((prevEntries) => [response.data, ...prevEntries]);
+      })
+      .catch((error) => {
+        console.error("Error saving data:", error);
+        alert("Failed to save data. Please try again.");
       });
   };
 
@@ -119,7 +136,7 @@ const VarianceCalculator = ({ section }) => {
       <h2>Variance Calculator</h2>
 
       <Form onSubmit={handleAddData}>
-        <Form.Group>
+        {/* <Form.Group>
           <Form.Label>Inventory Sold</Form.Label>
           <Form.Control
             type="number"
@@ -128,7 +145,7 @@ const VarianceCalculator = ({ section }) => {
               setCurrentData({ ...currentData, sold: Number(e.target.value) })
             }
           />
-        </Form.Group>
+        </Form.Group> */}
 
         <Form.Group>
           <Form.Label>Added to Inventory</Form.Label>
@@ -141,7 +158,7 @@ const VarianceCalculator = ({ section }) => {
           />
         </Form.Group>
 
-        <Form.Group>
+        {/* <Form.Group>
           <Form.Label>Transferred Inventory</Form.Label>
           <Form.Control
             type="number"
@@ -153,7 +170,7 @@ const VarianceCalculator = ({ section }) => {
               })
             }
           />
-        </Form.Group>
+        </Form.Group> */}
 
         <Form.Group>
           <Form.Label>Previous Day Sales</Form.Label>
@@ -183,20 +200,18 @@ const VarianceCalculator = ({ section }) => {
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit">
+        <Button color="red" m="sm" type="submit">
           Add Data for Today
         </Button>
       </Form>
-
+      
       {entries.length > 0 && (
         <Table striped>
           <thead>
             <tr>
               <th>Date</th>
               <th>Previous Day End Count</th>
-              <th>Inventory Sold</th>
               <th>Added to Inventory</th>
-              <th>Transferred Inventory</th>
               <th>Previous Day Sales</th>
               <th>End Count</th>
               <th>Book Count</th>
@@ -204,13 +219,11 @@ const VarianceCalculator = ({ section }) => {
             </tr>
           </thead>
           <tbody>
-            {entries.map((entry, index) => (
+            {filteredEntries.map((entry, index) => (
               <tr key={index}>
-                <td>{new Date(entry.date).toLocaleDateString()}</td>
+                <td>{new Date(entry.date + 'T00:00:00').toLocaleDateString()}</td>
                 <td>{entry.previous_day_end_count}</td>
-                <td>{entry.inventory_sold}</td>
                 <td>{entry.added_inventory}</td>
-                <td>{entry.transferred_inventory}</td>
                 <td>{entry.previous_day_sales}</td>
                 <td>{entry.end_count}</td>
                 <td>{entry.book_count}</td>

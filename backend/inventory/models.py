@@ -47,9 +47,9 @@ class VarianceCalculatorEntry(models.Model):
     section = models.CharField(max_length=10, choices=SECTION_CHOICES, null=True, blank=True)
     date = models.DateField(auto_now_add=True, verbose_name="Date")
     previous_day_end_count = models.PositiveIntegerField(verbose_name="Previous Day End Count")
-    inventory_sold = models.PositiveIntegerField(verbose_name="Inventory Sold")
+    # inventory_sold = models.PositiveIntegerField(verbose_name="Inventory Sold")
     added_inventory = models.PositiveIntegerField(verbose_name="Added to Inventory")
-    transferred_inventory = models.PositiveIntegerField(verbose_name="Transferred Inventory")
+    # transferred_inventory = models.PositiveIntegerField(verbose_name="Transferred Inventory")
     previous_day_sales = models.PositiveIntegerField(verbose_name="Previous Day Sales")
     end_count = models.PositiveIntegerField(verbose_name="End Count")
     book_count = models.PositiveIntegerField(verbose_name="Book Count", default=0)
@@ -62,3 +62,10 @@ class VarianceCalculatorEntry(models.Model):
         verbose_name = "Variance Calculator Entry"
         verbose_name_plural = "Variance Calculator Entries"
         ordering = ['-date']
+
+# -------------------
+# User Models
+# class User(modles.Model):
+#     username = models.CharField(max_length=100)
+#     email = models.EmailField()
+#     password = models.CharField(max_length=128)

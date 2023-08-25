@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import { Container, Row, Col, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { login } from "../actions/auth";
 import "dracula-ui/styles/dracula-ui.css";
 import { Card, Text, Input, Button, Anchor } from "dracula-ui";

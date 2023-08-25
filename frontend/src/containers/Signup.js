@@ -1,31 +1,45 @@
 import React, { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import { Container, Row, Col, Form } from "react-bootstrap";
-import { register } from "../actions/auth"; // Assuming you have a register action
+import { Form } from "react-bootstrap";
+import { signup } from "../actions/auth"; // Assuming you have a register action
 import "dracula-ui/styles/dracula-ui.css";
 import { Card, Text, Input, Button, Anchor } from "dracula-ui";
 
-const Signup = ({ register }) => {
+const Signup = ({ signup, isAuthenticated }) => {
+  const [accountCreated, setAccountCreated] = useState(false);
   const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
-    confirmPassword: "" // Added for password confirmation
+    re_password: "",
   });
 
-  const { email, password, confirmPassword } = formData;
+  const { first_name, last_name, email, password, re_password } = formData;
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    if (password === confirmPassword) {
-      register(email, password);
-    } else {
-      // Handle password mismatch (e.g., show an error message)
+
+    if (password === re_password) {
+      signup(first_name, last_name, email, password, re_password);
+      setAccountCreated(true);
     }
   };
+
+  const navigate = useNavigate();
+  if (isAuthenticated) {
+    navigate("/");
+    return null;
+  }
+
+  if (accountCreated) {
+    navigate("/login");
+    return null;
+  }
 
   return (
     <Card
@@ -45,6 +59,30 @@ const Signup = ({ register }) => {
         </Text>
       </div>
       <Form onSubmit={onSubmit}>
+        <Input
+          my="sm"
+          color="white"
+          variant="outline"
+          placeholder="First Name"
+          type="text"
+          name="first_name"
+          value={first_name}
+          onChange={onChange}
+          height="sm"
+        />
+
+        <Input
+          my="sm"
+          color="white"
+          variant="outline"
+          placeholder="Last Name"
+          type="text"
+          name="last_name"
+          value={last_name}
+          onChange={onChange}
+          height="sm"
+        />
+
         <Input
           my="sm"
           color="white"
@@ -75,8 +113,8 @@ const Signup = ({ register }) => {
           variant="outline"
           placeholder="Confirm Password"
           type="password"
-          name="confirmPassword"
-          value={confirmPassword}
+          name="re_password"
+          value={re_password}
           onChange={onChange}
           height="sm"
         />
@@ -105,7 +143,7 @@ const Signup = ({ register }) => {
 };
 
 const mapStateToProps = (state) => ({
-  // is authenticated: state.auth.isAuthenticated,
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(null, { register })(Signup);
+export default connect(mapStateToProps, { signup })(Signup);

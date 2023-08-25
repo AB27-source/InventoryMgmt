@@ -1,33 +1,33 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Dashboard from './components/Dashboard';
-import Home2 from './components/Home2';
-import Other1 from './components/other1';
-import Other2 from './components/other2';
-import { ConfigProvider } from './ConfigContext';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./containers/Home";
+import Login from "./containers/Login";
+import Layout from "./HOCS/Layout";
+// import Signup from "./containers/Signup";
+import Activate from "./containers/Activate";
+import ResetPassword from "./containers/ResetPassword";
+import ResetConfirm from "./containers/ResetConfirm";
 
-const config = {
-  varianceCalculatorEndpoint: "http://localhost:8000/api/variancecalculator/",
-  snackshelfEndpoint: "http://localhost:8000/api/snackshelf/",
-  freezerEndpoint: "http://localhost:8000/api/freezer/",
-  beveragesEndpoint: "http://localhost:8000/api/beverages/"
-}
+import { Provider } from "react-redux";
+import store from "./store";
 
-function App() {
+const App = () => {
   return (
-    <ConfigProvider value={config}>
+    <Provider store={store}>
       <Router>
-        <div>
+        <Layout>
           <Routes>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/home2" element={<Home2 />} />
-            <Route path="/other1" element={<Other1 />} />
-            <Route path="/other2" element={<Other2 />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            {/* <Route path="/signup" element={<Signup />} /> */}
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/password/reset/confirm/:uid/:token" element={<ResetConfirm />} />
+            <Route path="/activate/:uid/:token" element={<Activate />} />
           </Routes>
-        </div>
+        </Layout>
       </Router>
-    </ConfigProvider>
+    </Provider>
   );
-}
+};
 
 export default App;

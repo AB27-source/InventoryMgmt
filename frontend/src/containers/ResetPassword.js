@@ -41,7 +41,6 @@ const ResetPassword = ({ reset_password }) => {
       m="auto"
       mx="auto"
       my="auto"
-      rounded="base"
       width="md"
       display="block"
     >

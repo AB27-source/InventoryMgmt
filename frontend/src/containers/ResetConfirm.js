@@ -44,7 +44,6 @@ const ResetPasswordConfirm = ({ reset_password_confirm }) => {
       m="auto"
       mx="auto"
       my="auto"
-      rounded="base"
       width="md"
       display="block"
     >

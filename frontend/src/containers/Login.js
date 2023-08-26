@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { Form } from "react-bootstrap";
@@ -6,7 +6,7 @@ import { login } from "../actions/auth";
 import "dracula-ui/styles/dracula-ui.css";
 import { Card, Text, Input, Button, Anchor } from "dracula-ui";
 
-const Login = ({ login, isAuthenticated}) => {
+const Login = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -22,12 +22,13 @@ const Login = ({ login, isAuthenticated}) => {
     login(email, password);
   };
 
-  // if (isAuthenticated) is true redirect to home page
   const navigate = useNavigate();
-  if (isAuthenticated) {
-    navigate("/");
-    return null;
-  }
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <Card
@@ -37,7 +38,6 @@ const Login = ({ login, isAuthenticated}) => {
       m="auto"
       mx="auto"
       my="auto"
-      rounded="base"
       width="md"
       display="block"
     >

@@ -26,7 +26,7 @@ const Navigationbar = ({ logout, isAuthenticated }) => {
 
   const authLinks = () => (
     <Nav.Link href="#!" onClick={logout}>
-      <Text color="white" size="lg" align="center" mb="lg">
+      <Text color="white" size="md" align="center" mb="lg">
         Logout
       </Text>
     </Nav.Link>

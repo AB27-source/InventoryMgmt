@@ -21,6 +21,7 @@ const initialState = {
   refresh: localStorage.getItem("refresh"),
   isAuthenticated: null,
   user: null,
+  loginError: null,
 };
 
 // Name the function "authReducer"
@@ -63,6 +64,10 @@ function authReducer(state = initialState, action) {
             user: null
         }
     case LOGIN_FAIL:
+      return{
+        ...state,
+        loginError: payload.non_field_errors && payload.non_field_errors.length > 0 ? payload.non_field_errors[0] : "Login failed.",
+      }
     case SIGNUP_FAIL:
     case LOGOUT:
         localStorage.removeItem('access');

@@ -1,0 +1,26 @@
+# Django related
+*.pyc
+__pycache__/
+*.log
+*.pot
+*.pyo
+*.mo
+db.sqlite3
+backend/.DS_Store
+
+# Frontend related
+frontend/node_modules/
+frontend/.env
+frontend/package-lock.json
+frontend/.DS_Store
+
+# Virtual Environment
+venv/
+
+# IDE related
+.vscode/
+*.iml
+*.idea/
+
+# OS related
+.DS_Store

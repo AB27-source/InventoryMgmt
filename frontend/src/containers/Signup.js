@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import { Form } from "react-bootstrap";
 import { signup } from "../actions/auth";
+import { Card, Input, Button, Link, Spacer } from "@nextui-org/react";
 import "dracula-ui/styles/dracula-ui.css";
-import { Card, Text, Input, Button, Anchor } from "dracula-ui";
+import { Text } from "dracula-ui";
+
+const centerText = {
+  textAlign: "center",
+  marginBottom: "20px",
+};
 
 const Signup = ({ signup, isAuthenticated }) => {
-  const [accountCreated, setAccountCreated] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -25,7 +29,6 @@ const Signup = ({ signup, isAuthenticated }) => {
 
     if (password === re_password) {
       signup(name, email, password, re_password);
-      setAccountCreated(true);
     }
   };
 
@@ -33,97 +36,78 @@ const Signup = ({ signup, isAuthenticated }) => {
 
   useEffect(() => {
     if (isAuthenticated) {
-        navigate("/");
-    } else if (accountCreated) {
-        navigate("/login");
+      navigate("/");
     }
-  }, [isAuthenticated, accountCreated, navigate]);
+  }, [isAuthenticated, navigate]);
 
   return (
-    <Card
-      variant="normal"
-      color="blackSecondary"
-      p="lg"
-      m="auto"
-      mx="auto"
-      my="auto"
-      width="md"
-      display="block"
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
     >
-      <div className="mb-3 text-center">
-        <Text color="white" size="lg" align="center" mb="lg">
-          UB Inventory Management
-        </Text>
-      </div>
-      <Form onSubmit={onSubmit}>
-        <Input
-          my="sm"
-          color="white"
-          variant="outline"
-          placeholder="Name"
-          type="text"
-          name="name"
-          value={name || ""}
-          onChange={onChange}
-          height="sm"
-        />
-
-        <Input
-          my="sm"
-          color="white"
-          variant="outline"
-          placeholder="Email"
-          type="email"
-          name="email"
-          value={email || ""}
-          onChange={onChange}
-          height="sm"
-        />
-
-        <Input
-          my="sm"
-          color="white"
-          variant="outline"
-          placeholder="Password"
-          type="password"
-          name="password"
-          value={password || ""}
-          onChange={onChange}
-          height="sm"
-        />
-
-        <Input
-          my="sm"
-          color="white"
-          variant="outline"
-          placeholder="Confirm Password"
-          type="password"
-          name="re_password"
-          value={re_password || ""}
-          onChange={onChange}
-          height="sm"
-        />
-
-        <div className="text-center">
-          <Button
-            variant="ghost"
-            color="green"
-            type="submit"
-            width="1/2"
-            mx="auto"
-            display="block"
-            my="sm"
+      <Card shadow style={{ maxWidth: "400px", padding: "40px", width: "90%" }}>
+        <h3>UB Inventory Management</h3>
+        <Spacer y={2} />
+        <form onSubmit={onSubmit}>
+          <Input
+            style={{ lineHeight: "1.5", padding: "10px 5px", height: "40px" }}
+            type="text"
+            label="Name"
+            name="name"
+            value={name}
+            onChange={onChange}
+          />
+          <Spacer y={2} />
+          <Input
+            style={{ lineHeight: "1.5", padding: "10px 5px", height: "40px" }}
+            type="email"
+            label="Email"
+            name="email"
+            value={email}
+            onChange={onChange}
+          />
+          <Spacer y={2} />
+          <Input
+            style={{ lineHeight: "1.5", padding: "10px 5px", height: "40px" }}
+            type="password"
+            label="Password"
+            name="password"
+            value={password}
+            onChange={onChange}
+          />
+          <Spacer y={2} />
+          <Input
+            style={{ lineHeight: "1.5", padding: "10px 5px", height: "40px" }}
+            type="password"
+            label="Confirm Password"
+            name="re_password"
+            value={re_password}
+            onChange={onChange}
+          />
+          <Spacer y={3} />
+          <div style={centerText}>
+            <Button color="primary" block type="submit">
+              Register
+            </Button>
+          </div>
+        </form>
+        <div style={centerText}>
+          <Spacer y={3} />
+          <Link
+            color="primary"
+            block
+            href="/login"
+            style={{ marginBottom: "10px" }}
           >
-            Register
-          </Button>
+            Already have an account? Login
+          </Link>
         </div>
-      </Form>
-      <div className="mt-3 text-center">
-        <Anchor href="/login" color="green" hoverColor="pink" mb="sm" size="sm">
-          Already have an account? Login
-        </Anchor>
-      </div>
-    </Card>
+      </Card>
+    </div>
   );
 };
 

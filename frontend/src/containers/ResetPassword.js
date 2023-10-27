@@ -2,10 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { reset_password } from "../actions/auth";
-// style sheets
-import { Form } from "react-bootstrap";
+import { Card, Input, Button, Link, Spacer } from "@nextui-org/react";
 import "dracula-ui/styles/dracula-ui.css";
-import { Card, Text, Input, Button, Anchor } from "dracula-ui";
+import { Text } from "dracula-ui";
+
+const centerText = {
+  textAlign: "center",
+  marginBottom: "20px",
+};
 
 const ResetPassword = ({ reset_password }) => {
   const [requestSent, setRequestSent] = useState(false);
@@ -24,7 +28,6 @@ const ResetPassword = ({ reset_password }) => {
     setRequestSent(true);
   };
 
-  // if (isAuthenticated) is true redirect to home page
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,48 +37,35 @@ const ResetPassword = ({ reset_password }) => {
   }, [requestSent, navigate]);
 
   return (
-    <Card
-      variant="normal"
-      color="blackSecondary"
-      p="lg"
-      m="auto"
-      mx="auto"
-      my="auto"
-      width="md"
-      display="block"
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
     >
-      <div className="mb-3 text-center">
-        <Text color="white" size="lg" align="center" mb="lg">
-          Request Password Reset
-        </Text>
-      </div>
-      <Form onSubmit={onSubmit}>
-        <Input
-          my="sm"
-          color="white"
-          variant="outline"
-          placeholder="Email"
-          type="email"
-          name="email"
-          value={email}
-          onChange={onChange}
-          height="sm"
-        />
-        <div className="text-center">
-          <Button
-            variant="ghost"
-            color="green"
-            type="submit"
-            width="1/2"
-            mx="auto"
-            display="block"
-            my="sm"
-          >
-            Reset Password
-          </Button>
-        </div>
-      </Form>
-    </Card>
+      <Card shadow style={{ maxWidth: "400px", padding: "40px", width: "90%" }}>
+        <h3 style={centerText}>Request Password Reset</h3>
+        <Spacer y={2} />
+        <form onSubmit={onSubmit}>
+          <Input
+            style={{ lineHeight: "1.5", padding: "10px 5px", height: "40px" }}
+            type="email"
+            label="Email"
+            name="email"
+            value={email}
+            onChange={onChange}
+          />
+          <div style={centerText}>
+            <Spacer y={3} />
+            <Button color="primary" block type="submit">
+              Reset Password
+            </Button>
+          </div>
+        </form>
+      </Card>
+    </div>
   );
 };
 

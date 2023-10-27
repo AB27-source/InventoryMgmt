@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import { verify } from "../actions/auth";
-import "dracula-ui/styles/dracula-ui.css";
-import { Card, Text, Button } from "dracula-ui"; // Import Button
+import { Card, Button, Spacer } from "@nextui-org/react"; // Adjusted import for Next UI
 
 const Activate = ({ verify }) => {
   const [verified, setVerified] = useState(false);
@@ -19,37 +18,29 @@ const Activate = ({ verify }) => {
   }
 
   return (
-    <Card
-      variant="normal"
-      color="blackSecondary"
-      p="lg"
-      m="auto"
-      mx="auto"
-      my="auto"
-      width="md"
-      display="block"
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
     >
-      <div className="mb-3 text-center">
-        <Text color="white" size="lg" align="center" mb="lg">
+      <Card shadow style={{ maxWidth: "400px", padding: "40px", width: "90%" }}>
+        <h3 style={{ textAlign: "center" }}>
           Verify your account
-        </Text>
-        <div className="text-center">
-          <Button
-            variant="ghost"
-            color="green"
-            onClick={verify_account}
-            style={{ marginTop: "50px" }}
-            type="button"
-            width="1/2"
-            mx="auto"
-            display="block"
-            my="sm"
-          >
-            Verify
-          </Button>
-        </div>
-      </div>
-    </Card>
+        </h3>
+        <Spacer y={3} />
+        <Button
+          color="primary"
+          block
+          onClick={verify_account}
+          style={{ marginTop: "50px" }}
+        >
+          Verify
+        </Button>
+      </Card>
+    </div>
   );
 };
 

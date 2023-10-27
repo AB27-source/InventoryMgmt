@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -9,6 +9,8 @@ import "dracula-ui/styles/dracula-ui.css";
 import { Text, Button } from "dracula-ui"; // Import Button
 
 const Navigationbar = ({ logout, isAuthenticated }) => {
+  const navigate = useNavigate();
+
   const guestLinks = () => (
     <Fragment>
       <Nav.Link as={Link} to="/login">
@@ -24,8 +26,13 @@ const Navigationbar = ({ logout, isAuthenticated }) => {
     </Fragment>
   );
 
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   const authLinks = () => (
-    <Nav.Link href="#!" onClick={logout}>
+    <Nav.Link href="#!" onClick={handleLogout}>
       <Text color="white" size="md" align="center" mb="lg">
         Logout
       </Text>
